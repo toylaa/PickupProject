@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+<meta charset="utf-8">
+<title>Hello...</title>
+
+<style type="text/css">
+#mainContent, center, #loginForm {
+	font-family: Parkavenue, cursive;
+	font-size: xx-large;
+	font-weight: bold;
+	padding: 10px;
+	text-align: center;
+}
+.buttonStyle {
+	border-radius: 4px;
+	border: thin solid #F0E020;
+	padding: 5px;
+	background-color: #F8F094;
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+	font-weight: bold;
+	color: #663300;
+	width: 75px;
+}
+
+.buttonStyle:hover {
+	border: thin solid #FFCC00;
+	background-color: #FCF9D6;
+	color: #996633;
+	cursor: pointer;
+}
+.buttonStyle:active {
+	border: thin solid #99CC00;
+	background-color: #F5FFD2;
+	color: #669900;
+	cursor: pointer;
+}
+
+html, body {
+	margin-left: auto;
+    margin-right: auto;
+ 	 height: 100%;
+  	margin: 0;
+}
+#map{
+  height: 100%;
+  margin: 100px;
+}
+</style>
+</head>
+
+<body background="gallop.jpg">
+	
+<script src="https://maps.googleapis.com/maps/api/js?callback=myMap"></script>
+<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=AIzaSyB4t9Qz7KzXS6f9-f5ckIGeLlZ23LaCDDY&sensor=false"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.1.min.js"></script>
+<script type="text/javascript" src="jquery.gmap.min.js"></script>
+
+
+  
+
+
+
+<div id="mainContent">
+	
+	<p id="helloText">Wanna Play?</p>
+
+	<button id="btn1" class="buttonStyle"><a href='#'>Games</a></button>
+	<button id="btn2" class="buttonStyle"><a href="p3.html">Log In</a></button>
+
+</div>
+
+<div id="mapid" style="display:none" >
+	<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d17923.95274913848!2d-74.07781964134408!3d41.74347112105733!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xdd44509810bdda63!2sState+University+of+New+York+at+New+Paltz!5e1!3m2!1sen!2sus!4v1476209520682" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+	</div>
+</div>
+
+<script> 
+
+
+
+var greeting = document.getElementById("mainContent");
+var btn1 = document.getElementById("btn1");
+var btn2 = document.getElementById("btn2");
+var myMap = document.getElementById("mapid");
+
+btn1.addEventListener('click', publicButton, false);
+btn2.addEventListener('click', loginButton, false);
+
+
+function publicButton() {
+	btn1.style.visibility = 'hidden'; 
+	myMap.style.display='table';
+}
+
+function loginButton() {
+
+	greeting.style.visibility = 'hidden'; 
+	myMap.style.display='none';
+	window.location = "p3.html"
+	// loginForm.style.display='inline'; 
+}
+
+
+
+</script>
+
+</body>
+
+</html>
