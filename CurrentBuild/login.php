@@ -103,6 +103,15 @@ if(isset($_POST['submitted'])){
           </div>
         </div>
         
+         <div class="row">
+              
+              <div class="col-sm-4 col-md-offset-4" style="text-align: center">
+                  <h5>Not Registered? Register <a href="Register.php">HERE</a></h5>
+              </div>
+              
+            </div>
+            
+        
       </div>
         
 </form>

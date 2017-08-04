@@ -42,6 +42,12 @@ if(isset($_POST['submitted'])){
 		
 		mysqli_query($db, $sql )or die('ERROR');
 		
+		
+		$sql = "SELECT from interested where event_id = '$event_id ' and user = '$name'";
+		
+		mysqli_query($db, $sql )or die('ERROR');
+		
+		
 			$sql = "update events set viewers = viewers - 1 where id = '$event_id'";
 		mysqli_query($db, $sql )or die('error2');
 		

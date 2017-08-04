@@ -7,20 +7,36 @@ if(isset($_POST['submitted'])){
 	
 	$userid = $_POST['UserName'];
 	$passcode = $_POST['PassWord'];
+	$passcode2 = $_POST['PassWord2'];
 	
 	
+ if ($passcode !==$passcode2){
+        //passcodes DO NOT match 
+        
+      }
+      else{
+          echo $a." is after ".$b." in the alphabet";
+      }
+ 
  
   
 	//Compile SQL INSERT statement
 	$insert = "INSERT INTO UserPass (userid, passcode) VALUES ('$userid', '$passcode')";
 	
+	
+	//If sql returns FALSE (=fail)
 	if(!mysqli_query($db, $insert)){
-		die('error creating user id.');
+	  
+	  
+		//die('error' . mysqli_error($db));
+		//
 		$_SESSION["isReg"] = false;
+		
 	}
 	else{
 	$_SESSION["isReg"] = true;
 	
+	//Call a separate page rather than replace elements 
 	header('Location: SuccessfulRegister.html');
 	}
 }
@@ -79,27 +95,51 @@ if(isset($_POST['submitted'])){
            <div class="container-fluid">
              
             <div class="row">
-              <div class="col-sm-1 col-md-offset-3">
-                <h4>UserName: </h4>
-              </div>
-             <div class="col-sm-4">
-                  <input type="text" class="form-control " name="UserName">
+              
+             <div class="col-xs-6 col-xs-offset-3 col-xl-6 col-xl-offset-3">
+                  <input type="text" class="form-control text-center" name="UserName" placeholder="Please Choose a UserName">
               </div>
             </div>
             
             <div class="row">
               
-              <div class="col-sm-1 col-md-offset-3">
-                <h4>PassWord:</h4>
-              </div>
               
-              <div class="col-sm-4">
-                  <input type="password" class="form-control" name="PassWord">
+              
+              <div class=" col-xs-6 col-xs-offset-3 col-xl-6 col-xl-offset-3">
+                  <input type="password" class="form-control text-center" name="PassWord" placeholder="Please choose a Password">
               </div>
+            </div>
+            
+            
+            <div class="row">
+              
+              <div class="col-xs-6 col-xs-offset-3 col-xl-6 col-xl-offset-3">
+                  <input type="password" class="form-control text-center" name="PassWord2" placeholder="Please Re-Type Password">
+              
+              
               <div class="col-sm-4">
                   <input type="submit" class="btn btn-primary" value="Register">
               </div>
+              
+              
+              </div>
+              
             </div>
+            
+            
+             <div class="row">
+              
+              <div class="col-sm-4 col-md-offset-4" style="text-align: center">
+                  <h5>Already Registered? Login <a href="login.php">HERE</a></h5>
+              </div>
+              
+            </div>
+            
+            
+            
+            
+            
+            
             
           </div>
         </div>
