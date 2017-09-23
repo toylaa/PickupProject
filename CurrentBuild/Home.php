@@ -43,18 +43,9 @@ if(isset($_POST['submitted'])){
 		mysqli_query($db, $sql )or die('ERROR');
 		
 		
-		$sql = "SELECT from interested where event_id = '$event_id ' and user = '$name'";
+	//	$sql = "SELECT from interested where event_id = '$event_id ' and user = '$name'";
 		
-		mysqli_query($db, $sql )or die('ERROR');
-		
-		
-			$sql = "update events set viewers = viewers - 1 where id = '$event_id'";
-		mysqli_query($db, $sql )or die('error2');
-		
-		$sql = "update $sport set viewers = viewers - 1 where event_id = '$event_id'";
-
-		mysqli_query($db, $sql )or die('error3');
-		
+	//	mysqli_query($db, $sql )or die('ERROR');
 		
 		
 		header( 'Home.php' ) ;
@@ -254,6 +245,13 @@ if(isset($_POST['submitted'])){
 					$id = $row['id'];
 					$sport = $row['sport'];
 					
+					
+					$sqlGetInterested = "SELECT count(*) as viewers from interested WHERE event_id = '$id' ";
+					
+					
+					$sqlInterestedData = mysqli_query($db, $sqlGetInterested) or die('error getting data.');
+					$row2 = $sqlInterestedData->fetch_assoc();
+					
 					echo '<form method = "post" action = "Home.php" >';
 					
 					echo "<tr><td>";
@@ -271,7 +269,7 @@ if(isset($_POST['submitted'])){
 					echo "</td><td>";
 					echo $row['additional'];
 					echo "</td><td>";
-					echo $row['viewers'];
+					echo $row2['viewers'];
 					echo "</td>";
 					echo '<input type="hidden" name="submitted" value="true" />';
 					echo "<p><input type=\"hidden\" value=\"$id>\" name=\"id\" /></p>";

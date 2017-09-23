@@ -31,8 +31,13 @@ if(isset($_POST['submitted'])){
          header("location: Home.php");
       }
       else 
-         $error = "Your Login Name or Password is invalid";
-  }
+         $error = "
+         <div class='alert alert-danger' > 
+        <strong>Invalid </strong> username or password. Please Try again.
+        </div>
+        ";
+  
+}
   
 ?>
 
@@ -91,7 +96,7 @@ if(isset($_POST['submitted'])){
              
         <div class="row">
           <div class=" col-xs-6 col-xs-offset-3 col-xl-6 col-xl-offset-3 ">
-              <input type="text" class="form-control text-center" " name="UserName" placeholder= "Please Enter User Name Here..." >
+              <input type="text" class="form-control text-center" name="UserName" placeholder= "User Name" >
           </div>
         </div>
             
@@ -105,8 +110,9 @@ if(isset($_POST['submitted'])){
         
          <div class="row">
               
-              <div class="col-sm-4 col-md-offset-4" style="text-align: center">
-                  <h5>Not Registered? Register <a href="Register.php">HERE</a></h5>
+              <div class="col-xs-4 col-xs-offset-4 col-xl-4" style="text-align: center">
+                <div style = "color:#cc0000;"><center><?php echo  $error; ?></center></div>
+                <h5>Not Registered? Register <a href="Register.php">HERE</a></h5>
               </div>
               
             </div>
@@ -115,14 +121,6 @@ if(isset($_POST['submitted'])){
       </div>
         
 </form>
-
-
-
-<div style = "font-size:12px; color:#cc0000; margin-top:10px bg-warning"><center><?php echo  $error; ?></center></div>
-
-
-
-
 
 
 

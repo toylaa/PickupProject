@@ -1,52 +1,4 @@
-<?php 
-session_start();
-include('connect.php');
-$name = $_SESSION["userid"];
 
-
-
-if(isset($_POST['submitted'])){
-	{
-	//	$_POST['submitted']=false;
-		$event_id= trim($_POST['id'],"> ");
-		$time = trim($_POST['time'],"> ");
-		$date = trim($_POST['date'],"> ");
-		$location = trim($_POST['location'],"> ");
-		$additional = trim($_POST['additional'],"> ");
-		$sport = trim($_POST['sport'],"> ");
-		$eventName = trim($_POST['name'],"> ");//<--here
-		
-		 
-		
-	//select	echo "$event_id + $time + $vi"
-		
-		$sql = "INSERT INTO interested (event_id, user, name, time, date, location, sport, additional) VALUES ('$event_id ','$name','$eventName', '$time', '$date', '$location', '$sport', '$additional')";
-			
-		mysqli_query($db, $sql )or die('ERROR:(duplicate interest)');
-		
-		$sql = "update events set viewers = viewers + 1 where id = '$event_id'";
-		mysqli_query($db, $sql )or die('error2');
-		
-		$sql = "update $sport set viewers = viewers + 1 where event_id = '$event_id'";
-		mysqli_query($db, $sql )or die('error3');
-		
-		
-		
-	//	$sport = trim($sport,"> ");
-	//	$sportsql = "DELETE FROM $sport WHERE event_id ='$eventid' ";
-	//	mysqli_query($db, $sportsql )or die( "$sport" );
-		echo "
-						<div class='alert alert-success'>
-				  		<strong>Success!</strong>
-				  		
-				  		You are Now Subscribed to a NEW EVENT.
-				  		$eventName
-						</div>
-						";	
-		
-	}
-}
-?>
 
 <html>
 <head>
@@ -83,6 +35,62 @@ if(isset($_POST['submitted'])){
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
+
+
+	<?php 
+	session_start();
+	include('connect.php');
+	$name = $_SESSION["userid"];
+	
+	
+	
+	if(isset($_POST['submitted'])){
+		{
+		//	$_POST['submitted']=false;
+			$event_id= trim($_POST['id'],"> ");
+			$time = trim($_POST['time'],"> ");
+			$date = trim($_POST['date'],"> ");
+			$location = trim($_POST['location'],"> ");
+			$additional = trim($_POST['additional'],"> ");
+			$sport = trim($_POST['sport'],"> ");
+			$eventName = trim($_POST['name'],"> ");//<--here
+			
+			 
+			
+		//select	echo "$event_id + $time + $vi"
+		
+			//TODO ADD logic to check user has not already subscribed to this event already. 
+			
+			$sqlget = "SELECT * FROM interested WHERE event_id = '$event_id' and user = '$name'  ";
+			$sqldata = mysqli_query($db, $sqlget ); //or die('Error getting data');
+			$row = mysqli_fetch_array($sqldata, MYSQLI_ASSOC);
+			$count = mysqli_num_rows($sqldata);
+			
+			if ($count==0)
+			{
+				$sql = "INSERT INTO interested (event_id, user, name, time, date, location, sport, additional) VALUES ('$event_id ','$name','$eventName', '$time', '$date', '$location', '$sport', '$additional')";
+				
+			mysqli_query($db, $sql )or die('ERROR:(duplicate interest)');
+			
+		//	$sport = trim($sport,"> ");
+		//	$sportsql = "DELETE FROM $sport WHERE event_id ='$eventid' ";
+		//	mysqli_query($db, $sportsql )or die( "$sport" );
+			echo "
+							<div class='alert alert-success'>
+					  		<strong>Success!</strong>
+					  		
+					  		You are Now Subscribed to a NEW EVENT.
+					  		$eventName
+							</div>
+							";	
+							
+			}
+			
+		}
+	}
+	?>
+
+
     <title>All Events Forum</title>
 </head>
   
@@ -128,13 +136,19 @@ while($row = mysqli_fetch_array($sqldata, MYSQLI_ASSOC)){
 	
 	$user =  $row['user'];
 	$event_id = $row['id'];
-	$name =  $row['name'];      //<--here
+	$event_name =  $row['name'];      //<--here
 	$time = $row['time'];
 	$date = $row['date'];
 	$location = $row['location'];
 	$additional = $row['additional'];
 	$sport = "other";
 	
+	
+	$sqlGetInterested = "SELECT count(*) as viewers from interested WHERE event_id = '$event_id' ";
+	$sqlInterestedData = mysqli_query($db, $sqlGetInterested) or die('error getting data.');
+
+	$row2 = $sqlInterestedData->fetch_assoc();
+
 	
 	echo '<form method = "post" action = "AllEvents.php" >';
 	echo "<tr><td>";
@@ -150,12 +164,12 @@ while($row = mysqli_fetch_array($sqldata, MYSQLI_ASSOC)){
 	echo "</td><td>";
 	echo $row['additional'];
 	echo "</td><td>";
-	echo $row['viewers'];
+	echo $row2['viewers'];
 	echo "</td>";
 	echo '<input type="hidden" name="submitted" value="true" />';
 	
 	echo "<p><input type=\"hidden\" value=\"$event_id>\" name=\"id\" /></p>";
-	echo "<p><input type=\"hidden\" value=\"$name>\" name=\"name\" /></p>";  // <--here
+	echo "<p><input type=\"hidden\" value=\"$event_name>\" name=\"name\" /></p>";  // <--here
 	echo "<p><input type=\"hidden\" value=\"$time>\" name=\"time\" /></p>";
 	echo "<p><input type=\"hidden\" value=\"$date>\" name=\"date\" /></p>";
 	echo "<p><input type=\"hidden\" value=\"$location>\" name=\"location\" /></p>";

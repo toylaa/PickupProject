@@ -10,37 +10,72 @@ if(isset($_POST['submitted'])){
 	$passcode2 = $_POST['PassWord2'];
 	
 	
- if ($passcode !==$passcode2){
-        //passcodes DO NOT match 
-        
-      }
-      else{
-          echo $a." is after ".$b." in the alphabet";
-      }
- 
- 
+	//Search databaase for Desired username
+	$sqlget = "SELECT * FROM UserPass WHERE userid = '$userid'";
+  $sqldata = mysqli_query($db, $sqlget ); //or die('Error getting data');
+  $row = mysqli_fetch_array($sqldata, MYSQLI_ASSOC);
   
-	//Compile SQL INSERT statement
-	$insert = "INSERT INTO UserPass (userid, passcode) VALUES ('$userid', '$passcode')";
+  //Check number of rows in query results
+  $count = mysqli_num_rows($sqldata);
 	
 	
-	//If sql returns FALSE (=fail)
-	if(!mysqli_query($db, $insert)){
-	  
-	  
-		//die('error' . mysqli_error($db));
-		//
-		$_SESSION["isReg"] = false;
-		
+	 //CHECK number of rows - Do not continue if username is taken
+ if ($count>0){
+        //print error if username exists
+        $capitalName=strtoupper($userid);
+        $error = "
+        <div class='alert alert-danger' > 
+        <strong>Sorry! </strong> UserName '$capitalName' already taken. Please try again.
+        </div>
+        ";
+      }
+   
+    //Do not continue if passcodes do not match 
+else if ($passcode !==$passcode2)
+	{
+	  //print error if passcodes DO NOT match 
+        $error = "
+        <div class='alert alert-danger' > 
+        <strong>Whoah! </strong> Passwords do not match. Please try again.
+        </div>
+        ";
 	}
-	else{
-	$_SESSION["isReg"] = true;
 	
-	//Call a separate page rather than replace elements 
-	header('Location: SuccessfulRegister.html');
+	else if (strlen($passcode) < 7 )
+	{
+	  //print error if passcodes are less than 7 characters long
+        $error = "
+        <div class='alert alert-danger' > 
+        <strong>Sorry! </strong> Password must be longer than 7 characters.
+        </div>
+        ";
 	}
-}
-
+	
+	//if all conditions are met, continue to insert new userid and passcode into UserPass Table  
+	else // 
+      {
+          //Compile SQL INSERT statement
+      	$insert = "INSERT INTO UserPass (userid, passcode) VALUES ('$userid', '$passcode')";
+	
+      		//If sql returns FALSE (=fail)
+      	if(!mysqli_query($db, $insert)){
+      	  
+      		//die('error' . mysqli_error($db));
+      		//
+      		$_SESSION["isReg"] = false;
+      		//print error if insert fails
+        $error = "Database insert has failed for some reason. Contact Admin.";
+      		
+      	}
+      	else{
+      	$_SESSION["isReg"] = true;
+      	
+      	//Call a separate page rather than replace elements 
+      	header('Location: SuccessfulRegister.html');
+      	}//end inner else
+      	
+      }//end outer else
+}// end submission action code
 ?>
 
 
@@ -117,19 +152,19 @@ if(isset($_POST['submitted'])){
                   <input type="password" class="form-control text-center" name="PassWord2" placeholder="Please Re-Type Password">
               
               
-              <div class="col-sm-4">
-                  <input type="submit" class="btn btn-primary" value="Register">
-              </div>
-              
-              
-              </div>
-              
-            </div>
-            
-            
+                     </div>
+                      <input type="submit" style="text-align: center" class="btn btn-primary" value="Register">
+                     </div>
+                
+                
+             
              <div class="row">
               
-              <div class="col-sm-4 col-md-offset-4" style="text-align: center">
+              <div class="col-xs-6 col-xs-offset-3 col-xl-6" style="text-align: center">
+                
+                
+                   <div style = "color:#cc0000; margin-top:10px"><center><?php echo  $error; ?></center></div>
+              
                   <h5>Already Registered? Login <a href="login.php">HERE</a></h5>
               </div>
               
@@ -137,22 +172,10 @@ if(isset($_POST['submitted'])){
             
             
             
-            
-            
-            
-            
           </div>
         </div>
 
 </form>
-
-
-
-
-
-
-
-
 
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
